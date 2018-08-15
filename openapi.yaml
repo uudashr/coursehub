@@ -1,0 +1,151 @@
+openapi: 3.0.1
+info:
+  title: CourseHub API
+  description: API of CourseHub service.
+  version: 1.0.0
+
+servers:
+  - url: https://{environment}.coursehub.io
+    description: Deployment server
+    variables:
+      environment:
+        default: api
+        enum:
+          - api           # Production server
+          - api.staging   # Staging server
+          - api.dev       # Development server
+  - url: http://localhost:8080
+    description: Local development server
+
+tags: 
+  - name: account
+    description: Accounts
+  - name: health
+    description: Service health
+
+paths:
+  /accounts:
+    post:
+      tags:
+        - account
+      summary: Register new account
+      operationId: registerNewAccount
+      requestBody:
+        description: New account payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewAccount'
+      responses:
+        '201':
+          description: New account registered
+          headers:
+            Location:
+              description: Created resource
+              schema:
+                type: string
+                example: "/accounts/dee85bcb"
+        '409':
+          description: Account with same email already registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountReference'
+        '422':
+          description: Invalid payload
+    get:
+      tags:
+        - account
+      summary: Retrieve all accounts
+      operationId: retrieveAllAccounts
+      responses:
+        '200':
+          description: Account list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+              example:
+                - id: 'dee85bcb'
+                  name: 'Nuruddin Ashr'
+                  email: 'uudashr@gmail.com'
+                - id: 'dec734c0'
+                  name: 'Nuruddin Zanki'
+                  email: 'zanki@gmail.com'
+  /accounts/{accountId}:
+    get:
+      tags:
+        - account
+      summary: Retrieve account details
+      operationId: retrieveAccountDetails
+      parameters: 
+        - in: path
+          name: accountId
+          description: Account ID
+          required: true
+          schema:
+            type: string
+            example: "dee85bcb"
+      responses:
+        '200':
+          description: Account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+  /ping:
+    get:
+      tags:
+        - health
+      summary: Check service health
+      operationId: checkServiceHealth
+      responses:
+        '200':
+          description: Service up
+
+components:
+  schemas:
+    NewAccount:
+      type: object
+      description: New account payload
+      properties:
+        name:
+          type: string
+          example: "Nuruddin Ashr"
+        email:
+          type: string
+          example: "uudashr@gmail.com"
+      required:
+        - name
+        - email
+    Account:
+      type: object
+      description: Account details
+      properties:
+        id:
+          type: string
+          example: "dee85bcb"
+        name:
+          type: string
+          example: "Nuruddin Ashr"
+        email:
+          type: string
+          example: "uudashr@gmail.com"
+        verified:
+          type: boolean
+          default: false
+      required:
+        - id
+        - name
+        - email
+    AccountReference:
+      type: object
+      description: Account reference (contains ID only)
+      properties:
+        id:
+          type: string
+          example: "dee85bcb"
+      required:
+        - id
