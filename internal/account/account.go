@@ -1,6 +1,9 @@
 package account
 
 import (
+	"context"
+
+	"github.com/uudashr/coursehub/eventkit"
 	"labix.org/v2/mgo/bson"
 )
 
@@ -50,4 +53,20 @@ type Repository interface {
 // NextID returns next id.
 func NextID() string {
 	return bson.NewObjectId().Hex()
+}
+
+// Create creates new account.
+func Create(ctx context.Context, id, name, email string) (*Account, error) {
+	acc, err := New(id, name, email, false)
+	if err != nil {
+		return nil, err
+	}
+
+	eventkit.PublishContext(ctx, AccountCreated{
+		ID:    id,
+		Name:  name,
+		Email: email,
+	})
+
+	return acc, nil
 }
