@@ -23,7 +23,7 @@ func NewAccountService(repo account.Repository) (*AccountService, error) {
 // RegisterNewAccount registers new account.
 func (svc *AccountService) RegisterNewAccount(name, email string) (*account.Account, error) {
 	id := account.NextID()
-	acc, err := account.NewAccount(id, name, email, false)
+	acc, err := account.New(id, name, email, false)
 	if err != nil {
 		return nil, err
 	}

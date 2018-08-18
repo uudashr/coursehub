@@ -12,8 +12,8 @@ type Account struct {
 	verified bool
 }
 
-// NewAccount creates new Account instance.
-func NewAccount(id, name, email string, verified bool) (*Account, error) {
+// New creates new Account instance.
+func New(id, name, email string, verified bool) (*Account, error) {
 	return &Account{
 		id:       id,
 		name:     name,
