@@ -38,6 +38,19 @@ func (h HandlerFunc) Handle(e Event) {
 	h(e)
 }
 
+// EventMatcher matches event.
+type EventMatcher interface {
+	Match(Event) bool
+}
+
+// EventMatcherFunc is function adapter of EventMatcher.
+type EventMatcherFunc func(Event) bool
+
+// Match invoke m(e).
+func (m EventMatcherFunc) Match(e Event) bool {
+	return m(e)
+}
+
 // Bus represents the event bus.
 type Bus struct {
 	mu       sync.RWMutex
