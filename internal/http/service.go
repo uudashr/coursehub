@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/uudashr/coursehub/eventkit"
+
 	"github.com/uudashr/coursehub/applifecycle"
 
 	"github.com/uudashr/coursehub/internal/account"
@@ -11,8 +13,8 @@ import (
 
 // AccountService provides account related service.
 type AccountService struct {
-	repo          account.Repository
-	EventsHandler applifecycle.EventsHandler
+	repo         account.Repository
+	EventHandler eventkit.Handler
 }
 
 // NewAccountService construtcs new AccountService.
@@ -27,7 +29,7 @@ func NewAccountService(repo account.Repository) (*AccountService, error) {
 // RegisterNewAccount registers new account.
 func (svc *AccountService) RegisterNewAccount(name, email string) (acc *account.Account, err error) {
 	lc := &applifecycle.Lifecycle{
-		Handler: svc.EventsHandler,
+		EventHandler: svc.EventHandler,
 	}
 	defer lc.End(err)
 

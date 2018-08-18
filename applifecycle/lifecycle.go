@@ -6,25 +6,12 @@ import (
 	"github.com/uudashr/coursehub/eventkit"
 )
 
-// EventsHandler handles the events.
-type EventsHandler interface {
-	HandleEvents([]eventkit.Event)
-}
-
-// EventsHandlerFunc is the function adapter of EventsHandler.
-type EventsHandlerFunc func([]eventkit.Event)
-
-// HandleEvents invoke h(events).
-func (h EventsHandlerFunc) HandleEvents(events []eventkit.Event) {
-	h(events)
-}
-
 // Lifecycle is the application service lifecycle.
 // It dispatch events to the EventsHandler by providing eventkit.Publlisher via Context.
 type Lifecycle struct {
-	bus     *eventkit.Bus
-	Handler EventsHandler
-	events  []eventkit.Event
+	bus          *eventkit.Bus
+	EventHandler eventkit.Handler
+	events       []eventkit.Event
 }
 
 func (lc *Lifecycle) getBus() *eventkit.Bus {
@@ -45,9 +32,12 @@ func (lc *Lifecycle) Context(parent context.Context) context.Context {
 
 // End the lifecycle.
 func (lc *Lifecycle) End(err error) {
-	if err != nil || lc.Handler == nil {
+	handler := lc.EventHandler
+	if err != nil || handler == nil {
 		return
 	}
 
-	lc.Handler.HandleEvents(lc.events)
+	for _, e := range lc.events {
+		handler.Handle(e)
+	}
 }

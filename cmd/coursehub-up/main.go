@@ -14,7 +14,7 @@ const port = 8080
 func main() {
 	accRepo := inmem.NewAccountRepository()
 	accSvc, err := http.NewAccountService(accRepo)
-	accSvc.EventsHandler = new(logEventsHandler)
+	accSvc.EventHandler = new(logEventHandler)
 	if err != nil {
 		log.Fatal("Fail to create account service:", err)
 	}

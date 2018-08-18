@@ -6,11 +6,9 @@ import (
 	"github.com/uudashr/coursehub/eventkit"
 )
 
-type logEventsHandler struct {
+type logEventHandler struct {
 }
 
-func (h *logEventsHandler) HandleEvents(events []eventkit.Event) {
-	for _, e := range events {
-		log.Printf("Event %+v\n", e)
-	}
+func (h *logEventHandler) Handle(e eventkit.Event) {
+	log.Printf("Event %+v\n", e)
 }

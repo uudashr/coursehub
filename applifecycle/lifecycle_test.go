@@ -29,14 +29,12 @@ func ExampleLifecycle() {
 	}
 
 	// --- Lifecycle usage ---
-	h := applifecycle.EventsHandlerFunc(func(events []eventkit.Event) {
-		for _, e := range events {
-			fmt.Printf("Got event %q\n", e.Name)
-		}
+	h := eventkit.HandlerFunc(func(e eventkit.Event) {
+		fmt.Printf("Got event %q\n", e.Name)
 	})
 
 	lc := &applifecycle.Lifecycle{ // begin: lifecycle
-		Handler: h,
+		EventHandler: h,
 	}
 
 	err := InitiateOrder(lc.Context(context.Background()), "order-98", "item-52")
