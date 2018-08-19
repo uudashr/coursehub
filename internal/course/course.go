@@ -5,8 +5,8 @@ type Course struct {
 	name string
 }
 
-// NewCourse creates new Course.
-func NewCourse(name string) (*Course, error) {
+// New creates new Course.
+func New(name string) (*Course, error) {
 	return &Course{
 		name: name,
 	}, nil
