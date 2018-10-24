@@ -15,7 +15,7 @@ Course service like coursera, udemy, udacity, etc.
   ```
 - Download vendor dependencies
   ```
-  dep ensure -vendor-only
+  make vendor
   ```
 
 
