@@ -39,3 +39,8 @@ func (svc *AccountService) RegisterNewAccount(name, email string) (*account.Acco
 func (svc *AccountService) RetrieveAllAccounts() ([]*account.Account, error) {
 	return svc.repo.AllAccounts()
 }
+
+// RetrieveAccountDetails on the system.
+func (svc *AccountService) RetrieveAccountDetails(id string) (*account.Account, error) {
+	return svc.repo.AccountWithID(id)
+}

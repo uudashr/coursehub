@@ -38,3 +38,13 @@ func (r *AccountRepository) AllAccounts() ([]*account.Account, error) {
 
 	return accs, nil
 }
+
+// AccountWithID implements the account.Repository interface.
+func (r *AccountRepository) AccountWithID(id string) (*account.Account, error) {
+	acc, ok := r.m[id]
+	if !ok {
+		return nil, nil
+	}
+
+	return &acc, nil
+}

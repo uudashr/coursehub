@@ -1,6 +1,8 @@
 package account
 
 import (
+	"errors"
+
 	"labix.org/v2/mgo/bson"
 )
 
@@ -14,9 +16,22 @@ type Account struct {
 
 // New creates new Account instance.
 func New(id, name, email string, verified bool) (*Account, error) {
+	if id == "" {
+		return nil, errors.New("empty id")
+	}
+
+	if name == "" {
+		return nil, errors.New("empty name")
+	}
+
+	if email == "" {
+		return nil, errors.New("empty email")
+	}
+
 	return &Account{
 		id:       id,
 		name:     name,
+		email:    email,
 		verified: verified,
 	}, nil
 }
@@ -42,9 +57,11 @@ func (acc Account) Verified() bool {
 }
 
 // Repository represents Account repository.
+//go:generate mockery -name=Repository
 type Repository interface {
 	Store(*Account) error
 	AllAccounts() ([]*Account, error)
+	AccountWithID(id string) (*Account, error)
 }
 
 // NextID returns next id.
