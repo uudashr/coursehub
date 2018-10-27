@@ -78,6 +78,12 @@ paths:
                 - id: 'dec734c0'
                   name: 'Nuruddin Zanki'
                   email: 'zanki@gmail.com'
+                - id: "a212c483"
+                  name: "John Appleseed"
+                  email: "appleseed@gmail.com"
+                - id: "27ec0c54"
+                  name: "John Smith"
+                  email: "smith@gmail.com"
   /accounts/{accountId}:
     get:
       tags:
